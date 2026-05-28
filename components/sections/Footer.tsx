@@ -3,8 +3,8 @@ import { BrainCircuit, Globe } from "lucide-react";
 export function Footer() {
   return (
     <footer className="bg-[#0A0A0A] border-t border-white/10">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid sm:grid-cols-3 gap-8 mb-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid sm:grid-cols-3 gap-6 mb-6">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-3">

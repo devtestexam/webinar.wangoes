@@ -14,7 +14,7 @@ const credentials = [
 
 export function HostSection() {
   return (
-    <section id="host" className="relative py-24 bg-white overflow-hidden">
+    <section id="host" className="relative py-10 sm:py-14 bg-white overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-20" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#B3001B]/20 to-transparent" />
 
@@ -25,17 +25,17 @@ export function HostSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
           <div className="inline-flex items-center gap-2 bg-[#B3001B]/8 border border-[#B3001B]/20 rounded-full px-4 py-1.5 mb-5">
             <span className="text-xs font-bold text-[#B3001B] uppercase tracking-widest">Your Host</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
             Meet Your <span className="text-gradient-red">Host</span>
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left: Image */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -50,7 +50,7 @@ export function HostSection() {
               {/* Image frame */}
               <div className="relative w-72 h-80 rounded-3xl overflow-hidden border-2 border-[#B3001B]/20 glow-red shadow-2xl">
                 <Image
-                  src="/images/host.jpg"
+                  src="/images/host.png"
                   alt="Shreeram Yadav — Founder & AI Specialist at Wangoes Technologies"
                   fill
                   className="object-cover"

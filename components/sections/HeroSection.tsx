@@ -16,21 +16,21 @@ const eventDetails = [
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center bg-[#FAFAFA] overflow-hidden pt-20 pb-16">
+    <section className="relative min-h-[90vh] flex items-center bg-[#FAFAFA] overflow-hidden pt-20 pb-10">
       <GridBackground />
 
       {/* Top-right gradient blob */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-radial from-[#FF2E4D]/8 to-transparent blur-3xl pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 xl:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 xl:gap-12 items-center">
 
           {/* ── LEFT COLUMN ── */}
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-4"
           >
             {/* Limited badge */}
             <motion.div variants={fadeInUp} custom={0}>
@@ -45,7 +45,7 @@ export function HeroSection() {
 
             {/* Headline */}
             <motion.div variants={fadeInUp} custom={0.1}>
-              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black leading-[1.08] tracking-tight text-gray-900">
+              <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black leading-[1.1] tracking-tight text-gray-900">
                 How to Install an{" "}
                 <span className="text-gradient-red glow-text-red">AI OS</span>{" "}
                 in Your Business —{" "}

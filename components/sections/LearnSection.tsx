@@ -50,7 +50,7 @@ const lessons = [
 
 export function LearnSection() {
   return (
-    <section id="learn" className="relative py-24 bg-white overflow-hidden">
+    <section id="learn" className="relative py-10 sm:py-14 bg-white overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#B3001B]/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#B3001B]/20 to-transparent" />
@@ -63,12 +63,12 @@ export function LearnSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
           <div className="inline-flex items-center gap-2 bg-[#B3001B]/8 border border-[#B3001B]/20 rounded-full px-4 py-1.5 mb-5">
             <span className="text-xs font-bold text-[#B3001B] uppercase tracking-widest">Inside This Webinar</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
             What You&apos;ll{" "}
             <span className="text-gradient-red">Learn</span>
           </h2>
@@ -130,7 +130,7 @@ export function LearnSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-12 flex items-center justify-center gap-0"
+          className="mt-8 flex items-center justify-center gap-0 overflow-x-auto"
         >
           {["Foundation", "Audit", "Tools", "Action"].map((label, i) => (
             <div key={label} className="flex items-center">

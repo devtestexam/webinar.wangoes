@@ -13,7 +13,6 @@ const schema = z.object({
   email: z.string().email("Please enter a valid work email"),
   phone: z.string().min(7, "Please enter a valid phone number"),
   teamSize: z.string().min(1, "Please select your team size"),
-  challenge: z.string().min(20, "Please describe your challenge (min 20 characters)"),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -52,7 +51,7 @@ export function RegistrationForm() {
   };
 
   return (
-    <section id="register" className="relative py-24 bg-white overflow-hidden">
+    <section id="register" className="relative py-10 sm:py-14 bg-white overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-30" />
 
       {/* Background glow */}
@@ -67,7 +66,7 @@ export function RegistrationForm() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10"
+          className="text-center mb-6"
         >
           <div className="inline-flex items-center gap-2 bg-[#B3001B]/8 border border-[#B3001B]/20 rounded-full px-4 py-1.5 mb-5">
             <span className="relative flex h-2 w-2">
@@ -76,7 +75,7 @@ export function RegistrationForm() {
             </span>
             <span className="text-xs font-bold text-[#B3001B] uppercase tracking-widest">Limited Spots Remaining</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
             Reserve Your{" "}
             <span className="text-gradient-red">Free Seat</span>
           </h2>
@@ -203,20 +202,6 @@ export function RegistrationForm() {
                     ))}
                   </select>
                   {errors.teamSize && <p className={errorClass}>{errors.teamSize.message}</p>}
-                </div>
-
-                {/* Challenge */}
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1.5">
-                    Biggest Business Challenge <span className="text-[#B3001B]">*</span>
-                  </label>
-                  <textarea
-                    {...register("challenge")}
-                    rows={3}
-                    placeholder="What's the #1 manual or repetitive process that slows your business down?"
-                    className={`${inputClass} resize-none`}
-                  />
-                  {errors.challenge && <p className={errorClass}>{errors.challenge.message}</p>}
                 </div>
 
                 {/* Submit Button */}

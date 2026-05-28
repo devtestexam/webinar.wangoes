@@ -42,7 +42,7 @@ const pains = [
 
 export function ProblemSection() {
   return (
-    <section id="problem" className="relative py-24 bg-[#FAFAFA] overflow-hidden">
+    <section id="problem" className="relative py-10 sm:py-14 bg-[#FAFAFA] overflow-hidden">
       {/* Subtle grid */}
       <div className="absolute inset-0 grid-bg opacity-40" />
 
@@ -53,12 +53,12 @@ export function ProblemSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
           <div className="inline-flex items-center gap-2 bg-[#B3001B]/8 border border-[#B3001B]/20 rounded-full px-4 py-1.5 mb-5">
             <span className="text-xs font-bold text-[#B3001B] uppercase tracking-widest">Sound Familiar?</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight leading-tight">
             Still Running Your Business{" "}
             <span className="text-gradient-red">Manually?</span>
           </h2>
@@ -98,7 +98,7 @@ export function ProblemSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-16 text-center"
+          className="mt-8 text-center"
         >
           <div className="inline-block glass-card rounded-2xl px-8 py-6 border border-[#B3001B]/20 glow-red max-w-2xl">
             <p className="text-xl sm:text-2xl font-bold text-gray-800 leading-snug">
