@@ -48,7 +48,7 @@ export function HeroSection() {
               <h1 className="text-3xl sm:text-4xl xl:text-5xl font-black leading-[1.1] tracking-tight text-gray-900">
                 How to Install an{" "}
                 <span className="text-gradient-red glow-text-red">AI OS</span>{" "}
-                in Your Business —{" "}
+                in Your Business{" "}
                 <span className="relative">
                   and Never Work the Same Way Again
                 </span>

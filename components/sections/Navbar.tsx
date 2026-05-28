@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, BrainCircuit } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const navLinks = [
   { label: "What You'll Learn", href: "#learn" },
@@ -33,13 +34,8 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#B3001B] to-[#FF2E4D] flex items-center justify-center">
-              <BrainCircuit className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-black text-gray-900 text-sm tracking-tight">
-              Wangoes <span className="text-[#B3001B]">AI</span>
-            </span>
+          <div className="flex items-center">
+            <Image src="/images/logo.png" alt="Wangoes" width={80} height={48} className="h-10 w-auto object-contain" priority />
           </div>
 
           {/* Desktop nav */}

@@ -1,4 +1,5 @@
-import { BrainCircuit, Globe } from "lucide-react";
+import { Globe } from "lucide-react";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -7,13 +8,8 @@ export function Footer() {
         <div className="grid sm:grid-cols-3 gap-6 mb-6">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#B3001B] to-[#FF2E4D] flex items-center justify-center">
-                <BrainCircuit className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-black text-white text-sm">
-                Wangoes <span className="text-[#B3001B]">AI</span>
-              </span>
+            <div className="flex items-center mb-3">
+              <Image src="/images/logo.png" alt="Wangoes" width={140} height={44} className="h-10 w-auto object-contain" />
             </div>
             <p className="text-sm text-gray-500 leading-relaxed max-w-xs">
               Building real AI systems for SME business owners — not demos, but live solutions.
