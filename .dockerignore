@@ -1,8 +1,23 @@
+# Build output — rebuilt inside Docker, never copied in
 .next
+
+# Dependencies — reinstalled inside Docker via npm ci
 node_modules
+
+# Version control
 .git
 .gitignore
+
+# Local env files — never bake secrets into the image
+.env
+.env.local
+.env.*.local
+
+# Docs & meta
 *.md
+README*
+
+# Docker files themselves
 Dockerfile
 docker-compose.yml
 .dockerignore
