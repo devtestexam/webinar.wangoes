@@ -8,7 +8,7 @@ import { AIDashboardMockup } from "@/components/shared/AIDashboardMockup";
 import { fadeInUp, staggerContainer } from "@/components/shared/SectionWrapper";
 
 const eventDetails = [
-  { icon: <Calendar className="w-4 h-4" />, label: "Date", value: "Tuesday, 10 June 2026" },
+  { icon: <Calendar className="w-4 h-4" />, label: "Date", value: "Saturday, 14 June 2026" },
   { icon: <Clock className="w-4 h-4" />, label: "Time", value: "9:00 AM CET" },
   { icon: <Timer className="w-4 h-4" />, label: "Duration", value: "90 Minutes" },
   { icon: <Ticket className="w-4 h-4" />, label: "Cost", value: "Free Registration" },
@@ -62,14 +62,6 @@ export function HeroSection() {
                 <span className="line-through text-gray-400">Willpower</span>.{" "}
                 Start Running It on{" "}
                 <span className="text-[#B3001B] font-bold">AI.</span>
-              </p>
-            </motion.div>
-
-            {/* Supporting text */}
-            <motion.div variants={fadeInUp} custom={0.3}>
-              <p className="text-base sm:text-lg text-gray-500 max-w-xl leading-relaxed">
-                For SME owners drowning in manual tasks: walk away with a clear, practical
-                framework to automate your operations — even if you&apos;ve never touched an AI tool.
               </p>
             </motion.div>
 

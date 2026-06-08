@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Calendar, Clock, Timer, Ticket, AlertCircle, ArrowRight } from "lucide-react";
 
 const details = [
-  { icon: <Calendar className="w-5 h-5" />, label: "Date", value: "Tuesday, 10 June 2026" },
+  { icon: <Calendar className="w-5 h-5" />, label: "Date", value: "Saturday, 14 June 2026" },
   { icon: <Clock className="w-5 h-5" />, label: "Time", value: "9:00 AM CET" },
   { icon: <Timer className="w-5 h-5" />, label: "Duration", value: "90 Minutes" },
   { icon: <Ticket className="w-5 h-5" />, label: "Cost", value: "Free — No Credit Card" },

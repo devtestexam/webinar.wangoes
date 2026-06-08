@@ -43,11 +43,13 @@ export function RegistrationForm() {
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
-    // Simulate API call
     await new Promise((r) => setTimeout(r, 1800));
     console.log("Registration:", data);
     setLoading(false);
     setSubmitted(true);
+    if (typeof window !== "undefined" && typeof (window as any).fbq === "function") {
+      (window as any).fbq("track", "CompleteRegistration");
+    }
   };
 
   return (
@@ -80,7 +82,7 @@ export function RegistrationForm() {
             <span className="text-gradient-red">Free Seat</span>
           </h2>
           <p className="text-gray-500 mt-3 text-base">
-            Join 10 June · 90 Minutes · Learn How to Run Your Business on AI
+            Join 14 June · 90 Minutes · Learn How to Run Your Business on AI
           </p>
         </motion.div>
 
@@ -119,7 +121,7 @@ export function RegistrationForm() {
                 </div>
 
                 <div className="glass-card rounded-2xl p-4 w-full border border-emerald-200/50">
-                  <p className="text-sm font-bold text-emerald-600 mb-1">📅 Tuesday, 10 June 2026</p>
+                  <p className="text-sm font-bold text-emerald-600 mb-1">📅 Saturday, 14 June 2026</p>
                   <p className="text-sm text-gray-600">9:00 AM CET · 90 Minutes · Free</p>
                 </div>
 
