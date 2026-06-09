@@ -43,12 +43,21 @@ export function RegistrationForm() {
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1800));
-    console.log("Registration:", data);
-    setLoading(false);
-    setSubmitted(true);
-    if (typeof window !== "undefined" && typeof (window as any).fbq === "function") {
-      (window as any).fbq("track", "CompleteRegistration");
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Registration failed");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setSubmitted(true);
+      if (typeof window !== "undefined" && typeof (window as any).fbq === "function") {
+        (window as any).fbq("track", "CompleteRegistration");
+      }
     }
   };
 
