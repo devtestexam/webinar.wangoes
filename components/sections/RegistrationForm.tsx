@@ -160,8 +160,11 @@ export function RegistrationForm() {
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-2.5">
             <span className="text-lg">🎁</span>
             <p className="text-sm font-semibold text-amber-800">
-              Free E-Book <span className="font-black">"How to Install an AI OS in Your Business"</span> — for all attendees
-            </p>
+Free E-Book{" "}
+<span className="font-black">
+  &ldquo;How to Install an AI OS in Your Business&rdquo;
+</span>
+— for all attendees            </p>
           </div>
         </motion.div>
 
