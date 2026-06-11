@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CheckCircle2, Loader2, ArrowRight, Lock } from "lucide-react";
+import { CheckCircle2, Loader2, ArrowRight, Lock, ChevronDown } from "lucide-react";
 
 const schema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
@@ -16,6 +16,53 @@ const schema = z.object({
 });
 
 type FormData = z.infer<typeof schema>;
+
+const countryCodes = [
+  // Popular
+  { code: "+91", flag: "🇮🇳", name: "India" },
+  { code: "+1", flag: "🇺🇸", name: "USA / Canada" },
+  { code: "+44", flag: "🇬🇧", name: "UK" },
+  { code: "+971", flag: "🇦🇪", name: "UAE" },
+  { code: "+61", flag: "🇦🇺", name: "Australia" },
+  { code: "+65", flag: "🇸🇬", name: "Singapore" },
+  { code: "+92", flag: "🇵🇰", name: "Pakistan" },
+  { code: "+880", flag: "🇧🇩", name: "Bangladesh" },
+  { code: "+94", flag: "🇱🇰", name: "Sri Lanka" },
+  { code: "+60", flag: "🇲🇾", name: "Malaysia" },
+  { code: "+27", flag: "🇿🇦", name: "South Africa" },
+  // Europe
+  { code: "+43", flag: "🇦🇹", name: "Austria" },
+  { code: "+32", flag: "🇧🇪", name: "Belgium" },
+  { code: "+359", flag: "🇧🇬", name: "Bulgaria" },
+  { code: "+385", flag: "🇭🇷", name: "Croatia" },
+  { code: "+357", flag: "🇨🇾", name: "Cyprus" },
+  { code: "+420", flag: "🇨🇿", name: "Czech Republic" },
+  { code: "+45", flag: "🇩🇰", name: "Denmark" },
+  { code: "+372", flag: "🇪🇪", name: "Estonia" },
+  { code: "+358", flag: "🇫🇮", name: "Finland" },
+  { code: "+33", flag: "🇫🇷", name: "France" },
+  { code: "+49", flag: "🇩🇪", name: "Germany" },
+  { code: "+30", flag: "🇬🇷", name: "Greece" },
+  { code: "+36", flag: "🇭🇺", name: "Hungary" },
+  { code: "+353", flag: "🇮🇪", name: "Ireland" },
+  { code: "+39", flag: "🇮🇹", name: "Italy" },
+  { code: "+371", flag: "🇱🇻", name: "Latvia" },
+  { code: "+370", flag: "🇱🇹", name: "Lithuania" },
+  { code: "+352", flag: "🇱🇺", name: "Luxembourg" },
+  { code: "+356", flag: "🇲🇹", name: "Malta" },
+  { code: "+31", flag: "🇳🇱", name: "Netherlands" },
+  { code: "+47", flag: "🇳🇴", name: "Norway" },
+  { code: "+48", flag: "🇵🇱", name: "Poland" },
+  { code: "+351", flag: "🇵🇹", name: "Portugal" },
+  { code: "+40", flag: "🇷🇴", name: "Romania" },
+  { code: "+421", flag: "🇸🇰", name: "Slovakia" },
+  { code: "+386", flag: "🇸🇮", name: "Slovenia" },
+  { code: "+34", flag: "🇪🇸", name: "Spain" },
+  { code: "+46", flag: "🇸🇪", name: "Sweden" },
+  { code: "+41", flag: "🇨🇭", name: "Switzerland" },
+  { code: "+380", flag: "🇺🇦", name: "Ukraine" },
+  { code: "__other__", flag: "✏️", name: "Other (type manually)" },
+];
 
 const teamSizeOptions = [
   "Just me (solo founder)",
@@ -34,6 +81,23 @@ const errorClass = "text-xs text-[#B3001B] font-medium mt-1";
 export function RegistrationForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [countryCode, setCountryCode] = useState("+91");
+  const [manualCode, setManualCode] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const isManual = countryCode === "__other__";
+  const activeCode = isManual ? manualCode : countryCode;
+  const selectedCountry = countryCodes.find((c) => c.code === countryCode) ?? countryCodes[0];
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const {
     register,
@@ -47,7 +111,7 @@ export function RegistrationForm() {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, phone: `${activeCode} ${data.phone}` }),
       });
       if (!res.ok) throw new Error("Registration failed");
     } catch (err) {
@@ -93,6 +157,12 @@ export function RegistrationForm() {
           <p className="text-gray-500 mt-3 text-base">
             Join 14 June · 90 Minutes · Learn How to Run Your Business on AI
           </p>
+          <div className="mt-4 inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-2.5">
+            <span className="text-lg">🎁</span>
+            <p className="text-sm font-semibold text-amber-800">
+              Free E-Book <span className="font-black">"How to Install an AI OS in Your Business"</span> — for all attendees
+            </p>
+          </div>
         </motion.div>
 
         {/* Form card */}
@@ -191,12 +261,55 @@ export function RegistrationForm() {
                     <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1.5">
                       Phone Number <span className="text-[#B3001B]">*</span>
                     </label>
-                    <input
-                      {...register("phone")}
-                      type="tel"
-                      placeholder="+1 555 000 0000"
-                      className={inputClass}
-                    />
+                    <div className="flex gap-2 items-start">
+                      {/* Custom country code dropdown */}
+                      <div ref={dropdownRef} className="relative shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => setDropdownOpen((o) => !o)}
+                          className="flex items-center gap-1.5 bg-white/70 border border-gray-200 rounded-xl px-3 py-3 text-sm font-medium text-gray-800 focus:outline-none focus:border-[#B3001B] focus:ring-2 focus:ring-[#B3001B]/20 transition-all duration-200 hover:border-gray-300 whitespace-nowrap"
+                        >
+                          <span>{selectedCountry.flag}</span>
+                          <span>{isManual ? (manualCode || "+??") : countryCode}</span>
+                          <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} />
+                        </button>
+
+                        {dropdownOpen && (
+                          <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-xl overflow-y-auto max-h-56 min-w-[220px]">
+                            {countryCodes.map((c) => (
+                              <button
+                                key={`${c.name}-${c.code}`}
+                                type="button"
+                                onClick={() => { setCountryCode(c.code); setDropdownOpen(false); }}
+                                className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-[#B3001B]/8 transition-colors text-left ${countryCode === c.code ? "bg-[#B3001B]/10 font-semibold text-[#B3001B]" : "text-gray-700"}`}
+                              >
+                                <span className="text-base w-6 shrink-0">{c.flag}</span>
+                                <span className="font-medium w-12 shrink-0">{c.code === "__other__" ? "Other" : c.code}</span>
+                                <span className="text-gray-500 truncate">{c.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Manual code input when "Other" selected */}
+                      {isManual && (
+                        <input
+                          type="text"
+                          value={manualCode}
+                          onChange={(e) => setManualCode(e.target.value)}
+                          placeholder="+00"
+                          className="bg-white/70 border border-gray-200 rounded-xl px-3 py-3 text-sm font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#B3001B] focus:ring-2 focus:ring-[#B3001B]/20 transition-all duration-200 w-16 shrink-0"
+                        />
+                      )}
+
+                      <input
+                        {...register("phone")}
+                        type="tel"
+                        placeholder="98765 43210"
+                        className={inputClass}
+                      />
+                    </div>
                     {errors.phone && <p className={errorClass}>{errors.phone.message}</p>}
                   </div>
                 </div>

@@ -16,7 +16,7 @@ const eventDetails = [
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center bg-[#FAFAFA] overflow-hidden pt-20 pb-10">
+    <section className="relative min-h-[90vh] flex items-center bg-[#FAFAFA] overflow-hidden pt-6 pb-10">
       <GridBackground />
 
       {/* Top-right gradient blob */}
