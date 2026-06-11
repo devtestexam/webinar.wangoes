@@ -40,7 +40,7 @@ export function Footer() {
           <div>
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Event Details</h3>
             <div className="space-y-2 text-sm text-gray-500">
-              <p>📅 Saturday, 14 June 2026</p>
+              <p>📅 Sunday, 14 June 2026</p>
               <p>🕘 9:00 AM CET</p>
               <p>⏳ 90 Minutes</p>
               <p>🎟 Free Registration</p>

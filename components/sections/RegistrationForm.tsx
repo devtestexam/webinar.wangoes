@@ -203,7 +203,7 @@ Free E-Book{" "}
                 </div>
 
                 <div className="glass-card rounded-2xl p-4 w-full border border-emerald-200/50">
-                  <p className="text-sm font-bold text-emerald-600 mb-1">📅 Saturday, 14 June 2026</p>
+                  <p className="text-sm font-bold text-emerald-600 mb-1">📅 Sunday, 14 June 2026</p>
                   <p className="text-sm text-gray-600">9:00 AM CET · 90 Minutes · Free</p>
                 </div>
 
