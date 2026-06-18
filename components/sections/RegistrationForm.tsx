@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -81,6 +82,7 @@ const errorClass = "text-xs text-[#B3001B] font-medium mt-1";
 export function RegistrationForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [countryCode, setCountryCode] = useState("+91");
   const [manualCode, setManualCode] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -114,14 +116,15 @@ export function RegistrationForm() {
         body: JSON.stringify({ ...data, phone: `${activeCode} ${data.phone}` }),
       });
       if (!res.ok) throw new Error("Registration failed");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-      setSubmitted(true);
       if (typeof window !== "undefined" && typeof (window as any).fbq === "function") {
         (window as any).fbq("track", "CompleteRegistration");
       }
+      router.push("/thank-you");
+    } catch (err) {
+      console.error(err);
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -155,7 +158,7 @@ export function RegistrationForm() {
             <span className="text-gradient-red">Free Seat</span>
           </h2>
           <p className="text-gray-500 mt-3 text-base">
-            Join 14 June · 90 Minutes · Learn How to Run Your Business on AI
+            Join 2 July · 90 Minutes · Learn How to Run Your Business on AI
           </p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-2.5">
             <span className="text-lg">🎁</span>
@@ -203,7 +206,7 @@ Free E-Book{" "}
                 </div>
 
                 <div className="glass-card rounded-2xl p-4 w-full border border-emerald-200/50">
-                  <p className="text-sm font-bold text-emerald-600 mb-1">📅 Sunday, 14 June 2026</p>
+                  <p className="text-sm font-bold text-emerald-600 mb-1">📅 Thursday, 2 July 2026</p>
                   <p className="text-sm text-gray-600">9:00 AM CET · 90 Minutes · Free</p>
                 </div>
 

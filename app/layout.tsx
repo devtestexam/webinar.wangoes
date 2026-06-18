@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "How to Install an AI OS in Your Business | Free Webinar",
   description:
-    "Free webinar for SME owners to learn how to implement AI systems, automate workflows, and build an AI Operating System for their business. Join Shreeram Yadav on 14 June 2026.",
+    "Free webinar for SME owners to learn how to implement AI systems, automate workflows, and build an AI Operating System for their business. Join Shreeram Yadav on 2 July 2026.",
   keywords: [
     "AI webinar",
     "AI for SME",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "How to Install an AI OS in Your Business | Free Webinar",
     description:
-      "Stop running your business on willpower. Start running it on AI. Join this free 90-minute webinar for SME owners on 14 June 2026.",
+      "Stop running your business on willpower. Start running it on AI. Join this free 90-minute webinar for SME owners on 2 July 2026.",
     type: "website",
     locale: "en_US",
     siteName: "Wangoes Technologies",
@@ -63,8 +63,8 @@ export default function RootLayout({
               name: "How to Install an AI OS in Your Business",
               description:
                 "Free 90-minute webinar for SME owners to learn how to build a practical AI Operating System for their business.",
-              startDate: "2026-06-14T09:00:00+01:00",
-              endDate: "2026-06-14T10:30:00+01:00",
+              startDate: "2026-07-02T09:00:00+01:00",
+              endDate: "2026-07-02T10:30:00+01:00",
               eventStatus: "https://schema.org/EventScheduled",
               eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
               location: {
