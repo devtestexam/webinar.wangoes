@@ -63,8 +63,8 @@ export default function RootLayout({
               name: "How to Install an AI OS in Your Business",
               description:
                 "Free 90-minute webinar for SME owners to learn how to build a practical AI Operating System for their business.",
-              startDate: "2026-07-02T09:00:00+01:00",
-              endDate: "2026-07-02T10:30:00+01:00",
+              startDate: "2026-07-02T15:00:00+01:00",
+              endDate: "2026-07-02T15:45:00+01:00",
               eventStatus: "https://schema.org/EventScheduled",
               eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
               location: {

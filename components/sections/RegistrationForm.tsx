@@ -158,7 +158,7 @@ export function RegistrationForm() {
             <span className="text-gradient-red">Free Seat</span>
           </h2>
           <p className="text-gray-500 mt-3 text-base">
-            Join 2 July · 90 Minutes · Learn How to Run Your Business on AI
+            Join 2 July · 45 Minutes · Learn How to Run Your Business on AI
           </p>
           <div className="mt-4 inline-flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-2.5">
             <span className="text-lg">🎁</span>
@@ -207,7 +207,7 @@ Free E-Book{" "}
 
                 <div className="glass-card rounded-2xl p-4 w-full border border-emerald-200/50">
                   <p className="text-sm font-bold text-emerald-600 mb-1">📅 Thursday, 2 July 2026</p>
-                  <p className="text-sm text-gray-600">9:00 AM CET · 90 Minutes · Free</p>
+                  <p className="text-sm text-gray-600">3:00 PM CET · 45 Minutes · Free</p>
                 </div>
 
                 <p className="text-xs text-gray-400 font-medium">

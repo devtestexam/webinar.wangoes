@@ -9,8 +9,8 @@ import { fadeInUp, staggerContainer } from "@/components/shared/SectionWrapper";
 
 const eventDetails = [
   { icon: <Calendar className="w-4 h-4" />, label: "Date", value: "Thursday, 2 July 2026" },
-  { icon: <Clock className="w-4 h-4" />, label: "Time", value: "9:00 AM CET" },
-  { icon: <Timer className="w-4 h-4" />, label: "Duration", value: "90 Minutes" },
+  { icon: <Clock className="w-4 h-4" />, label: "Time", value: "3:00 PM CET" },
+  { icon: <Timer className="w-4 h-4" />, label: "Duration", value: "45 Minutes" },
   { icon: <Ticket className="w-4 h-4" />, label: "Cost", value: "Free Registration" },
 ];
 

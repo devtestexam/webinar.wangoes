@@ -9,7 +9,7 @@ interface TimeLeft {
   seconds: number;
 }
 
-const WEBINAR_DATE = new Date("2026-07-02T09:00:00+01:00");
+const WEBINAR_DATE = new Date("2026-07-02T15:00:00+01:00");
 
 export function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });

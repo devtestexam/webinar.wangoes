@@ -8,7 +8,7 @@ import { Calendar, Clock, CheckCircle2, BookOpen, Share2 } from "lucide-react";
 export default function ThankYouPage() {
   const webinarDetails = [
     { icon: <Calendar className="w-5 h-5" />, label: "Date", value: "Thursday, 2 July 2026" },
-    { icon: <Clock className="w-5 h-5" />, label: "Time", value: "9:00 AM CET · 90 Minutes" },
+    { icon: <Clock className="w-5 h-5" />, label: "Time", value: "3:00 PM CET · 45 Minutes" },
   ];
 
   return (

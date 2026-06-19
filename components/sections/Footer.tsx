@@ -41,8 +41,8 @@ export function Footer() {
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Event Details</h3>
             <div className="space-y-2 text-sm text-gray-500">
               <p>📅 Thursday, 2 July 2026</p>
-              <p>🕘 9:00 AM CET</p>
-              <p>⏳ 90 Minutes</p>
+              <p>🕒 3:00 PM CET</p>
+              <p>⏳ 45 Minutes</p>
               <p>🎟 Free Registration</p>
             </div>
             <div className="mt-4 flex items-center gap-1.5">

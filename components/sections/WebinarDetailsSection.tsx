@@ -5,8 +5,8 @@ import { Calendar, Clock, Timer, Ticket, AlertCircle, ArrowRight } from "lucide-
 
 const details = [
   { icon: <Calendar className="w-5 h-5" />, label: "Date", value: "Thursday, 2 July 2026" },
-  { icon: <Clock className="w-5 h-5" />, label: "Time", value: "9:00 AM CET" },
-  { icon: <Timer className="w-5 h-5" />, label: "Duration", value: "90 Minutes" },
+  { icon: <Clock className="w-5 h-5" />, label: "Time", value: "3:00 PM CET" },
+  { icon: <Timer className="w-5 h-5" />, label: "Duration", value: "45 Minutes" },
   { icon: <Ticket className="w-5 h-5" />, label: "Cost", value: "Free — No Credit Card" },
 ];
 
