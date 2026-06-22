@@ -116,8 +116,12 @@ export function RegistrationForm() {
         body: JSON.stringify({ ...data, phone: `${activeCode} ${data.phone}` }),
       });
       if (!res.ok) throw new Error("Registration failed");
-      if (typeof window !== "undefined" && typeof (window as any).fbq === "function") {
-        (window as any).fbq("track", "CompleteRegistration");
+      if (typeof window !== "undefined") {
+        if (typeof (window as any).fbq === "function") {
+          (window as any).fbq("track", "CompleteRegistration");
+        }
+        localStorage.setItem("webinar_registrant_email", data.email);
+        localStorage.setItem("webinar_registrant_name", data.fullName);
       }
       router.push("/thank-you");
     } catch (err) {
