@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
@@ -277,22 +277,25 @@ export function Survey() {
   const [direction, setDirection] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout>>();
+  // Refs to expose current values inside stable callbacks
+  const stepRef = useRef(0);
+  const answersRef = useRef<Record<number, string>>({});
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const answersRef = useRef(answers);
 
+  // Keep refs in sync
+  useEffect(() => { stepRef.current = step; }, [step]);
   useEffect(() => { answersRef.current = answers; }, [answers]);
 
-  const progress = (step / TOTAL) * 100;
   const q = QUESTIONS[step];
   const currentAnswer = answers[step] ?? "";
   const isLastStep = step === TOTAL - 1;
   const canContinue = q.type === "textarea" || !!currentAnswer;
+  const progress = (step / TOTAL) * 100;
 
-  // Restore from localStorage
+  // ── Restore from localStorage ──
   useEffect(() => {
     setMounted(true);
     try {
@@ -307,7 +310,7 @@ export function Survey() {
     } catch { /* ignore */ }
   }, []);
 
-  // Persist to localStorage
+  // ── Persist to localStorage ──
   useEffect(() => {
     if (!mounted || submitted) return;
     try {
@@ -315,7 +318,7 @@ export function Survey() {
     } catch { /* ignore */ }
   }, [step, answers, mounted, submitted]);
 
-  // Auto-focus textarea
+  // ── Auto-focus textarea ──
   useEffect(() => {
     if (q.type === "textarea") {
       const t = setTimeout(() => textareaRef.current?.focus(), 320);
@@ -323,14 +326,82 @@ export function Survey() {
     }
   }, [step, q.type]);
 
-  // Keyboard navigation
+  // ── Submit ──
+  const doSubmit = useCallback(async () => {
+    setSubmitting(true);
+    const email = localStorage.getItem("webinar_registrant_email") ?? "";
+    const name = localStorage.getItem("webinar_registrant_name") ?? "";
+    const a = answersRef.current;
+    try {
+      await fetch("/api/survey", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "survey", email, name,
+          role: a[0] ?? "", aiGoal: a[1] ?? "", aiAdoption: a[2] ?? "",
+          aiSuccess: a[3] ?? "", companySize: a[4] ?? "", revenue: a[5] ?? "",
+          challenge: a[6] ?? "", webinarQuestion: a[7] ?? "",
+        }),
+      });
+    } catch (err) {
+      console.error("[survey]", err);
+    } finally {
+      setSubmitting(false);
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+      setSubmitted(true);
+    }
+  }, []);
+
+  // ── Advance one step or submit on last ──
+  const advance = useCallback(() => {
+    clearTimeout(autoAdvanceRef.current);
+    const current = stepRef.current;
+    if (current < TOTAL - 1) {
+      setDirection(1);
+      setStep(current + 1);
+    } else {
+      doSubmit();
+    }
+  }, [doSubmit]);
+
+  // ── Select a choice option and auto-advance ──
+  const selectOption = useCallback((option: string) => {
+    clearTimeout(autoAdvanceRef.current);
+    const s = stepRef.current;
+    setAnswers(prev => {
+      const next = { ...prev, [s]: option };
+      answersRef.current = next;
+      return next;
+    });
+    autoAdvanceRef.current = setTimeout(() => {
+      if (s < TOTAL - 1) {
+        setDirection(1);
+        setStep(s + 1);
+      } else {
+        doSubmit();
+      }
+    }, 300);
+  }, [doSubmit]);
+
+  // ── Go back ──
+  const goBack = useCallback(() => {
+    clearTimeout(autoAdvanceRef.current);
+    const s = stepRef.current;
+    if (s > 0) {
+      setDirection(-1);
+      setStep(s - 1);
+    }
+  }, []);
+
+  // ── Keyboard navigation ──
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (submitted || submitting) return;
-      const current = QUESTIONS[step];
+      const s = stepRef.current;
+      const current = QUESTIONS[s];
 
       if (current.type === "choice" && current.options) {
-        const idx = current.options.indexOf(answersRef.current[step] ?? "");
+        const idx = current.options.indexOf(answersRef.current[s] ?? "");
         if (e.key === "ArrowDown" || e.key === "ArrowRight") {
           e.preventDefault();
           selectOption(current.options[(idx + 1) % current.options.length]);
@@ -338,7 +409,7 @@ export function Survey() {
           e.preventDefault();
           const prev = idx <= 0 ? current.options.length - 1 : idx - 1;
           selectOption(current.options[prev]);
-        } else if (e.key === "Enter" && answersRef.current[step]) {
+        } else if (e.key === "Enter" && answersRef.current[s]) {
           e.preventDefault();
           advance();
         }
@@ -351,66 +422,7 @@ export function Survey() {
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, [step, submitted, submitting]);
-
-  const selectOption = (option: string) => {
-    clearTimeout(autoAdvanceRef.current);
-    setAnswers(prev => ({ ...prev, [step]: option }));
-    autoAdvanceRef.current = setTimeout(() => advance(), 300);
-  };
-
-  const advance = () => {
-    clearTimeout(autoAdvanceRef.current);
-    if (step < TOTAL - 1) {
-      setDirection(1);
-      setStep(s => s + 1);
-    } else {
-      handleSubmit();
-    }
-  };
-
-  const goBack = () => {
-    clearTimeout(autoAdvanceRef.current);
-    if (step > 0) {
-      setDirection(-1);
-      setStep(s => s - 1);
-    }
-  };
-
-  const handleSubmit = async () => {
-    setSubmitting(true);
-    const email = typeof window !== "undefined" ? (localStorage.getItem("webinar_registrant_email") ?? "") : "";
-    const name = typeof window !== "undefined" ? (localStorage.getItem("webinar_registrant_name") ?? "") : "";
-    const a = answersRef.current;
-
-    try {
-      await fetch("/api/survey", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "survey",
-          email,
-          name,
-          role: a[0] ?? "",
-          aiGoal: a[1] ?? "",
-          aiAdoption: a[2] ?? "",
-          aiSuccess: a[3] ?? "",
-          companySize: a[4] ?? "",
-          revenue: a[5] ?? "",
-          challenge: a[6] ?? "",
-          webinarQuestion: a[7] ?? "",
-        }),
-      });
-    } catch (err) {
-      console.error("[survey]", err);
-    } finally {
-      setSubmitting(false);
-      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
-      setSubmitted(true);
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 2000);
-    }
-  };
+  }, [submitted, submitting, advance, selectOption]);
 
   if (!mounted) return null;
   if (submitted) return <SuccessScreen />;
@@ -420,37 +432,24 @@ export function Survey() {
       {/* Progress bar */}
       <div className="h-1.5 bg-gray-100">
         <motion.div
-          className="h-full bg-gradient-to-r from-[#B3001B] to-[#FF2E4D] origin-left"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: progress / 100 }}
+          className="h-full bg-gradient-to-r from-[#B3001B] to-[#FF2E4D]"
           style={{ transformOrigin: "left" }}
+          animate={{ scaleX: progress / 100 }}
+          initial={{ scaleX: 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}
         />
       </div>
 
       <div className="p-7 sm:p-10">
-        {/* Header row */}
+        {/* Step counter */}
         <div className="flex items-center justify-between mb-7">
           <div className="flex items-center gap-2">
             <span className="w-7 h-7 rounded-full bg-gradient-to-br from-[#B3001B] to-[#FF2E4D] text-white flex items-center justify-center text-xs font-black shadow-sm">
               {step + 1}
             </span>
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-              of {TOTAL}
-            </span>
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">of {TOTAL}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-1.5 w-24 bg-gray-100 rounded-full overflow-hidden hidden sm:block">
-              <motion.div
-                className="h-full bg-gradient-to-r from-[#B3001B] to-[#FF2E4D] rounded-full"
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.45, ease: "easeOut" }}
-              />
-            </div>
-            <span className="text-xs font-semibold text-gray-400">
-              {Math.round(progress)}% done
-            </span>
-          </div>
+          <span className="text-xs font-semibold text-gray-400">{Math.round(progress)}% done</span>
         </div>
 
         {/* Animated question */}
@@ -464,11 +463,8 @@ export function Survey() {
             exit="exit"
             transition={{ duration: 0.26, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            {/* Question text */}
             <div className="mb-6">
-              <h2 className="text-xl sm:text-2xl font-black text-gray-900 leading-snug">
-                {q.question}
-              </h2>
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900 leading-snug">{q.question}</h2>
               <p className="text-sm text-gray-500 mt-1.5">{q.subtitle}</p>
               {q.type === "choice" && (
                 <p className="text-xs text-gray-400 mt-1">
@@ -502,9 +498,7 @@ export function Survey() {
                           : "border-gray-200 bg-white hover:border-[#B3001B]/30 hover:bg-[#B3001B]/[0.02]"
                       }`}
                     >
-                      <span className="text-xl w-7 shrink-0 text-center leading-none">
-                        {OPTION_ICONS[option] ?? "•"}
-                      </span>
+                      <span className="text-xl w-7 shrink-0 text-center leading-none">{OPTION_ICONS[option] ?? "•"}</span>
                       <span className={`text-sm font-semibold flex-1 leading-snug ${isSelected ? "text-[#B3001B]" : "text-gray-700"}`}>
                         {option}
                       </span>
@@ -543,25 +537,21 @@ export function Survey() {
 
         {/* Navigation */}
         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
-          {/* Back */}
           <motion.button
             whileHover={step > 0 ? { x: -2 } : {}}
             whileTap={step > 0 ? { scale: 0.96 } : {}}
             onClick={goBack}
             disabled={step === 0}
             className={`flex items-center gap-1.5 text-sm font-semibold py-2.5 px-4 rounded-xl transition-all duration-200 ${
-              step === 0
-                ? "text-gray-300 cursor-not-allowed"
-                : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+              step === 0 ? "text-gray-300 cursor-not-allowed" : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
             }`}
           >
             <ChevronLeft className="w-4 h-4" />
             Back
           </motion.button>
 
-          {/* Continue / Next / Submit */}
           <AnimatePresence mode="wait">
-            {(q.type === "textarea" || canContinue) && (
+            {canContinue && (
               <motion.button
                 key="continue"
                 initial={{ opacity: 0, scale: 0.9, x: 8 }}
@@ -575,20 +565,11 @@ export function Survey() {
                 className="flex items-center gap-2 bg-gradient-to-r from-[#B3001B] to-[#FF2E4D] text-white font-bold text-sm py-3 px-6 rounded-xl shadow-md hover:shadow-lg disabled:opacity-60 transition-all duration-200"
               >
                 {submitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Submitting…
-                  </>
+                  <><Loader2 className="w-4 h-4 animate-spin" />Submitting…</>
                 ) : isLastStep ? (
-                  <>
-                    Submit
-                    <ArrowRight className="w-4 h-4" />
-                  </>
+                  <>Submit<ArrowRight className="w-4 h-4" /></>
                 ) : (
-                  <>
-                    Continue
-                    <ArrowRight className="w-4 h-4" />
-                  </>
+                  <>Continue<ArrowRight className="w-4 h-4" /></>
                 )}
               </motion.button>
             )}
