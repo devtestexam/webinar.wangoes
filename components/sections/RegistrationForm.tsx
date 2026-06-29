@@ -12,7 +12,7 @@ const schema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
   businessName: z.string().min(2, "Business name is required"),
   email: z.string().email("Please enter a valid work email"),
-  phone: z.string().min(7, "Please enter a valid phone number"),
+  phone: z.string().min(7, "Please enter a valid phone number").regex(/^\d+$/, "Phone number must contain only digits"),
   teamSize: z.string().min(1, "Please select your team size"),
 });
 
@@ -318,6 +318,16 @@ Free E-Book{" "}
                         type="tel"
                         placeholder="98765 43210"
                         className={inputClass}
+                        onKeyDown={(e) => {
+                          const allowed = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", "Home", "End"];
+                          if (!allowed.includes(e.key) && !/^\d$/.test(e.key)) {
+                            e.preventDefault();
+                          }
+                        }}
+                        onInput={(e) => {
+                          const target = e.currentTarget;
+                          target.value = target.value.replace(/\D/g, "");
+                        }}
                       />
                     </div>
                     {errors.phone && <p className={errorClass}>{errors.phone.message}</p>}
