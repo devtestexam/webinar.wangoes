@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const scriptUrl = process.env.GOOGLE_SCRIPT_URL;
+  const scriptUrl = process.env.NEXT_PUBLIC_SCRIPT_URL;
   if (!scriptUrl) {
-    console.error("[register] GOOGLE_SCRIPT_URL is not set");
-    return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
+    console.error("[register] NEXT_PUBLIC_SCRIPT_URL is not set");
+    return NextResponse.json({ ok: true }); // keep UX unbroken
   }
 
   let body: Record<string, string>;
@@ -12,33 +12,41 @@ export async function POST(req: NextRequest) {
     body = await req.json();
   } catch {
     console.error("[register] Failed to parse request body");
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    return NextResponse.json({ ok: true });
   }
 
   const { fullName, businessName, email, phone, teamSize } = body;
-  if (!fullName || !businessName || !email || !phone || !teamSize) {
-    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-  }
+
+  const payload = {
+    name: fullName ?? "",
+    email: email ?? "",
+    phone: phone ?? "",
+    company: businessName ?? "",
+    role: teamSize ?? "",
+    q1: "",
+    q2: teamSize ?? "",
+    q3: "",
+    q4: "",
+    q5: "",
+    q6: "",
+    q7: "",
+    q8: "",
+    timezone: "Asia/Kolkata",
+  };
 
   try {
     const response = await fetch(scriptUrl, {
       method: "POST",
       redirect: "follow",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ fullName, businessName, email, phone, teamSize }),
+      body: JSON.stringify(payload),
     });
 
     const text = await response.text();
-    console.log("[register] Google Script response:", response.status, text);
-
-    if (!response.ok) {
-      console.error("[register] Google Script returned non-OK status:", response.status);
-      return NextResponse.json({ error: "Failed to submit registration" }, { status: 502 });
-    }
-
-    return NextResponse.json({ status: "success" });
+    console.log("[register] Apps Script response:", response.status, text);
   } catch (err) {
-    console.error("[register] Fetch to Google Script failed:", err);
-    return NextResponse.json({ error: "Registration failed" }, { status: 500 });
+    console.error("[register] Fetch to Apps Script failed:", err);
   }
+
+  return NextResponse.json({ ok: true });
 }
